@@ -1,0 +1,13 @@
+#!/bin/bash
+
+NAME=$(dialog --stdout \
+	--inputbox "digite o nome do seu arquivo: " \
+	0 0)
+
+COMMENT=$(dialog --stdout \
+	--inputbox "digite um commentario sobre o seu programa: " \
+	0 0)
+
+./cabecalho.sh $NAME "$COMMENT"
+
+cat $NAME

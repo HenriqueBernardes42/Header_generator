@@ -1,22 +1,27 @@
 #!/bin/bash
+#	cabecalho.sh (Shell script)
+#
+#	 Objetivo: criar um arquivo com um cabeçalho padrão
+#
+#	 Site: https://HenriqueBernardes42.github.io
+#
+#	 Versão 1.0
+#
+#	 Programador: Henrique Bernardes 
+#
+#	 Email: henriquepabe@gmail.com
+#
 
-#cabecalho.sh (Shell script)
-#
-# Objetivo: criar um arquivo com um cabeçalho padrão
-#
-# Site: https://HenriqueBernardes42.github.io
-#
-# Versão 1.0
-#
-# Programador: Henrique Bernardes 
-#
-# Email: henriquepabe@gmail.com
-#
 
+# variaveis
+ARQUIVO=$1
+EXTENCAO_DO_ARQUIVO=${ARQUIVO##*.}
 VERSION="Versão 1.0"
 
-[ -z $1 ] && echo "Nenhuma extensão encontrada, use -h para obter ajuda" && exit 1
 
+#algumas opções que o usurio pode utilizar
+#ajuda
+#versao do codigo 
 case $1 in
 	-h | --help)
 		vim ajuda.txt
@@ -27,35 +32,57 @@ case $1 in
 		exit 0
 	;;
 esac
-	
-#extenção do arquivo
-for i in {"-sh","-py","-js","-c","-jar","-ty"}
-do
+
 
 	
-	[ "$1"  = "-sh" ] && LNG=$(echo "Shell script"I) && SHEBANG=$(echo "#!/bin/bash")
-	[ "$1"  = "-py" ] && LNG=$(echo "Phyton") && SHEBANG=$(echo "#!/usr/bin/env python")	
-	[ "$1"  = "-js" ] && LNG=$(echo "JavaScript") && SHEBANG=$()
-[ "$1"  = "-c" ] && LNG=$(echo "C")
-[ "$1"  = "-jar" ] && LNG=$(echo "Java")
-[ "$1"  = "-ty" ] && LNG=$(echo "TypeScript")
-
-done
+#procura a extenção do arquivo com seu respectivo nome	
+[ "$EXTENCAO_DO_ARQUIVO"  = "sh" ] && LNG=$(echo "Shell Script") && SHEBANG=$(echo "!/bin/bash")
+[ "$EXTENCAO_DO_ARQUIVO"  = "py" ] && LNG=$(echo "Phyton") && SHEBANG=$(echo "!/usr/bin/env python")	
+[ "$EXTENCAO_DO_ARQUIVO"  = "js" ] && LNG=$(echo "JavaScript") && SHEBANG=$()
+[ "$EXTENCAO_DO_ARQUIVO"  = "c" ] && LNG=$(echo "C") && SHEBANG=$(echo "include <stdio.h>")	
+[ "$EXTENCAO_DO_ARQUIVO"  = "jar" ] && LNG=$(echo "Java")
+[ "$EXTENCAO_DO_ARQUIVO"  = "ty" ] && LNG=$(echo "TypeScript")
 
 
 #cabeçalho que será gerado
-echo -e "$SHEBANG
-	$2 ($LNG)\n
-	Objetivo: $3\n
+funcao(){
+	echo -e "$SHEBANG
+	$1 ($LNG)\n
+	Objetivo: $2\n
 	Site: https://HenriqueBernardes42.github.io\n
 	$VERSION\n
-	Programador: Henrique Bernardesi\n
-       	data de criação: $(date	+%d/%m/%Y)\n 
+	Programador: Henrique Bernardes\n
+      	data de criação: $(date	+%d/%m/%Y)\n 
 	Email: henriquepabe@gmail.com\n
-" > $2
+"
+}
+
+#verificaçáo  se o arquivo $1 já existe
+if [ -f  $1 ]
+then
+        read -p "este arquivo já existe, gostaria de sobreescrever?" RESPOSTA
+        if [ $RESPOSTA == "sim" ]
+                then
+                        funcao $1 "$2" > $1
+        elif [ $RESPOSTA == "nao" ]
+                then
+                        echo "arquivo não sobreescrito"
+        else
+                         echo "comando não reconhecido"
+        fi
+else
+	funcao $1 "$2" >> $1
+fi
+ 
 
 
 
 
-# "#" em todas as linhas
-# data
+
+
+#transforma a função anterior em um comentario adiocionado "#" no começo de todas as linhas
+	sed -i 's/^/#/' $1
+
+
+
+
